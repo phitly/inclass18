@@ -3,10 +3,10 @@ import 'package:http/http.dart' as http;
 import '../models/question.dart';
 
 class ApiService {
-  static Future<List<Question>> fetchQuestions() async {
+  static Future<List<Question>> fetchQuestions({String difficulty = 'easy'}) async {
     final response = await http.get(
       Uri.parse(
-          'https://opentdb.com/api.php?amount=10&category=9&difficulty=easy&type=multiple'),
+          'https://opentdb.com/api.php?amount=10&category=9&difficulty=$difficulty&type=multiple'),
     );
 
     if (response.statusCode == 200) {

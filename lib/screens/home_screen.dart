@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 import 'quiz_screen.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  String _selectedDifficulty = 'easy';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,7 +55,9 @@ class HomeScreen extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => QuizScreen()),
+                        MaterialPageRoute(
+                          builder: (context) => QuizScreen(difficulty: _selectedDifficulty),
+                        ),
                       );
                     },
                     icon: Icon(Icons.play_arrow, size: 28),
@@ -101,17 +110,7 @@ class HomeScreen extends StatelessWidget {
                           ],
                         ),
                         SizedBox(height: 8),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.star, color: Colors.white, size: 20),
-                            SizedBox(width: 8),
-                            Text(
-                              'Easy Difficulty',
-                              style: TextStyle(color: Colors.white, fontSize: 16),
-                            ),
-                          ],
-                        ),
+                        _buildDifficultySelector(),
                         SizedBox(height: 8),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -183,6 +182,60 @@ class HomeScreen extends StatelessWidget {
           ],
         );
       },
+    );
+  }
+
+  Widget _buildDifficultySelector() {
+    return Container(
+      padding: EdgeInsets.all(3),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.3),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _buildDifficultyButton('easy', 'Easy', Icons.sentiment_satisfied),
+          _buildDifficultyButton('medium', 'Medium', Icons.sentiment_neutral),
+          _buildDifficultyButton('hard', 'Hard', Icons.sentiment_very_dissatisfied),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDifficultyButton(String difficulty, String label, IconData icon) {
+    bool isSelected = _selectedDifficulty == difficulty;
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _selectedDifficulty = difficulty;
+        });
+      },
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+        decoration: BoxDecoration(
+          color: isSelected ? Colors.white : Colors.transparent,
+          borderRadius: BorderRadius.circular(18),
+        ),
+        child: Row(
+          children: [
+            Icon(
+              icon,
+              color: isSelected ? Colors.blue[800] : Colors.white,
+              size: 16,
+            ),
+            SizedBox(width: 4),
+            Text(
+              label,
+              style: TextStyle(
+                color: isSelected ? Colors.blue[800] : Colors.white,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                fontSize: 13,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
