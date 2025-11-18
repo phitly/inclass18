@@ -76,8 +76,68 @@ class _QuizScreenState extends State<QuizScreen> {
 
     if (_currentQuestionIndex >= _questions.length) {
       return Scaffold(
+        appBar: AppBar(title: Text('Quiz Completed')),
         body: Center(
-          child: Text('Quiz Finished! Your Score: $_score/${_questions.length}'),
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.emoji_events,
+                  size: 80,
+                  color: Colors.amber,
+                ),
+                SizedBox(height: 24),
+                Text(
+                  'Quiz Finished!',
+                  style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 16),
+                Text(
+                  'Your Score: $_score/${_questions.length}',
+                  style: TextStyle(fontSize: 24),
+                ),
+                SizedBox(height: 8),
+                Text(
+                  '${((_score / _questions.length) * 100).toStringAsFixed(1)}%',
+                  style: TextStyle(fontSize: 20, color: Colors.grey[600]),
+                ),
+                SizedBox(height: 40),
+                ElevatedButton.icon(
+                  onPressed: () {
+                    setState(() {
+                      _currentQuestionIndex = 0;
+                      _score = 0;
+                      _answered = false;
+                      _selectedAnswer = "";
+                      _feedbackText = "";
+                      _loading = true;
+                    });
+                    _loadQuestions();
+                  },
+                  icon: Icon(Icons.refresh),
+                  label: Text('Try Another Quiz'),
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                    textStyle: TextStyle(fontSize: 16),
+                  ),
+                ),
+                SizedBox(height: 12),
+                OutlinedButton.icon(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  icon: Icon(Icons.home),
+                  label: Text('Return to Home'),
+                  style: OutlinedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                    textStyle: TextStyle(fontSize: 16),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       );
     }
